@@ -1,0 +1,34 @@
+version: "3"
+##
+## htpasswd -bc ./passwd hoge hoge00
+## http://localhost:12080/svn
+## svn://localhost:13960
+## 1. 
+##   # cd /home/svn
+##   # svnadmin create sample-repo
+##   # chown -R apache:apache sample-repo
+## $ svn mkdir trunk branches tags
+## A         trunk
+## A         branches
+## A         tags
+## ip-172-24-128-64:sample-repo takanobu$ svn commit -m "First commit" --username hoge --password hoge00 --no-auth-cache
+## Adding         branches
+## Adding         tags
+## Adding         trunk
+## Committing transaction...
+## Committed revision 1.
+## $ svn list --username hoge --password hoge00 http://localhost:12080/svn/sample-repo
+## branches/
+## tags/
+## trunk/
+
+services:
+  my-svn:
+    container_name: my-svn
+    image: elleflorio/svn-server
+    volumes:
+      - "./passwd:/etc/subversion/passwd"
+      - "./svn:/home/svn"
+    ports:
+      - "12080:80"
+      - "13960:3960"
